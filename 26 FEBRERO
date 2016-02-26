@@ -1,0 +1,26 @@
+install.packages("foreign")
+library(foreign)
+sdem105<-data.frame(read.dbf("C:\\Users\\SALA-C21\\Documents\\SDEMT215.dbf"))
+##Recodificar variables numericas por rangos
+##método 1
+sdem105$CLASE2.1[as.numeric(sdem105$CLASE2) >=0 & as.numeric(sdem105$CLASE2)<=2] <-1
+sdem105$CLASE2.1[as.numeric(sdem105$CLASE2) >=3 & as.numeric(sdem105$CLASE2)<=4] <-2
+##lo que estamos haciendo es recodificar la variable clase poniendole 1 o 2 dependiendo de que rango escojamos
+##método 2
+attach(sdem105)
+sdem105$CLASE2.2 <- ifelse(as.numeric(CLASE2) >= 1 & as.numeric(CLASE2)<=2,1, ifelse(as.numeric(CLASE2) >= 3 & as.numeric(CLASE2)<=3,2, 3))
+table (sdem105$CLASE2.1)
+##Recodificar la variable edad
+sdem105$EDAD1.3[as.numeric(sdem105$EDA) >=1 & as.numeric(sdem105$EDA) <=15] <- 1
+sdem105$EDAD1.3[as.numeric(sdem105$EDA) >=16& as.numeric(sdem105$EDA) <=30] <- 2
+sdem105$EDAD1.3[as.numeric(sdem105$EDA) >=31& as.numeric(sdem105$EDA) <=60] <- 3
+sdem105$EDAD1.3[as.numeric(sdem105$EDA) >=61& as.numeric(sdem105$EDA) <=98] <- 4
+sdem105$EDAD1.3[as.numeric(sdem105$EDA) >=99& as.numeric(sdem105$EDA) <=100] <- 5
+install.packages('questionr')
+require (questionr)
+##etiquetar
+sdem105$EDAD1.3 <- ordered(sdem105$EDAD1.3, levels = c(1, 2, 3, 4, 5), labels = c("niños", "jovenes", "adultos", "adultos mayores", "no especificado"))
+table (sdem105$EDAD1.3)
+sdem105$EDAD1.4 <- ifelse(as.numeric(EDA) >= 1 & as.numeric(EDA)<=15,1, ifelse(as.numeric(EDA)>=16 & as.numeric(EDA)<=30,2, ifelse(as.numeric(EDA)>=31 & as.numeric(EDA)<=60,3, ifelse(as.numeric(EDA)>=61 & as.numeric(EDA)<=98,4, ifelse(as.numeric(EDA)>=99 & as.numeric(EDA)<=100,5, 6)))))
+sdem105$EDAD1.4 <- ordered(sdem105$EDAD1.4, levels = c(1, 2, 3, 4, 5), labels = c("niños", "jovenes", "adultos", "adultos mayores", "no especificado"))
+table (sdem105$EDAD1.4)
